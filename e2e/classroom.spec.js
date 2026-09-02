@@ -7,6 +7,17 @@ const routes = lessonCounts.flatMap((count, lessonIndex) => Array.from({ length:
 })));
 const scanRoutes = process.env.ROUTE_LIMIT ? routes.slice(0, Number(process.env.ROUTE_LIMIT)) : routes;
 
+test('course home starts learning and exposes all five lessons', async ({ page }) => {
+  await page.goto('./#/');
+  await expect(page.locator('[data-course-home]')).toBeVisible();
+  await expect(page.getByRole('button', { name: /开始学习/ })).toBeVisible();
+  await expect(page.locator('[data-course-home] [data-route]')).toHaveCount(5);
+  await page.getByRole('button', { name: /开始学习/ }).click();
+  await expect(page.locator('[data-step-id="L01-S01"]')).toBeVisible();
+  await page.reload();
+  await expect(page.locator('[data-step-id="L01-S01"]')).toBeVisible();
+});
+
 test.beforeEach(async ({ page }) => {
   const startupErrors = [];
   page.on('pageerror', (error) => startupErrors.push(error.message));

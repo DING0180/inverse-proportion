@@ -5,8 +5,11 @@ import { COURSE } from '../src/core/course-data.js';
 
 describe('hash routing', () => {
   it('parses and serializes lesson routes', () => {
+    expect(parseHash('')).toEqual({ page: 'home' });
+    expect(parseHash('#/')).toEqual({ page: 'home' });
     expect(parseHash('#/lesson/02/step/04')).toEqual({ lessonId: '02', stepNumber: '04' });
-    expect(parseHash('#/bad')).toEqual({ lessonId: '01', stepNumber: '01' });
+    expect(parseHash('#/bad')).toEqual({ page: 'home' });
+    expect(routeToHash({ page: 'home' })).toBe('#/');
     expect(routeToHash({ lessonId: '5', stepNumber: '21' })).toBe('#/lesson/05/step/21');
   });
 });

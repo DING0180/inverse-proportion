@@ -4,6 +4,17 @@ import { COURSE } from '../src/core/course-data.js';
 import { createStepRegistry } from '../src/core/step-registry.js';
 
 describe('Classroom shell and lesson engine', () => {
+  it('renders a course home with a start action and five lesson entrances', () => {
+    const root = document.createElement('div');
+    const app = createClassroomApp({ root, course: COURSE, registry: createStepRegistry({ withDefaults: true }), initialRoute: { page: 'home' }, useHashRouter: false });
+    expect(root.querySelector('[data-course-home]')).not.toBeNull();
+    expect(root.querySelector('[data-action="start-learning"]')).not.toBeNull();
+    expect(root.querySelectorAll('[data-course-home] [data-route]').length).toBe(5);
+    root.querySelector('[data-action="start-learning"]').click();
+    expect(root.querySelector('[data-step-id="L01-S01"]')).not.toBeNull();
+    app.destroy();
+  });
+
   it('renders the current step with a centered seven-step rail', () => {
     const root = document.createElement('div');
     const app = createClassroomApp({ root, course: COURSE, registry: createStepRegistry({ withDefaults: true }), initialRoute: { lessonId: '02', stepNumber: '04' }, useHashRouter: false });
